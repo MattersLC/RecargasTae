@@ -51,7 +51,7 @@ fun App(configDevice: CrossConfigDevice? = null) {
                             Text(
                                 text = titleTopBar,
                                 fontSize = 25.sp,
-                                color = colors.backgroundColor
+                                color = colors.textColor
                             )
                         }
                     )}

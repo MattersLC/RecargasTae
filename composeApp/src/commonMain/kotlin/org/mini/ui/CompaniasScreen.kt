@@ -62,7 +62,7 @@ fun CompaniaCard(companias: Companias, onCompaniasClick: (nombre: String) -> Uni
     val colors = getColorsTheme()
     Card(
         shape = RoundedCornerShape(16.dp),
-        backgroundColor = colors.backgroundColor,
+        backgroundColor = colors.textColor,
         elevation = 8.dp,
         onClick = {
             onCompaniasClick(companias.nombre)
@@ -79,7 +79,7 @@ fun CompaniaCard(companias: Companias, onCompaniasClick: (nombre: String) -> Uni
             contentScale = ContentScale.FillWidth,
             modifier = Modifier
                 .clip(RoundedCornerShape(16.dp)) // Bordes redondeados para que coincidan con la Card
-                .background(colors.backgroundColor) // Fondo si es necesario
+                .background(Color.Transparent) // Fondo si es necesario
         )
     }
 }
