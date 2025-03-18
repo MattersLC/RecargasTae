@@ -1,0 +1,6 @@
+CREATE TABLE  Companias(
+    id INTEGER PRIMARY KEY NOT NULL,
+    nombre TEXT NOT NULL,
+    category TEXT NOT NULL
+);
+
