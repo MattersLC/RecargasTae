@@ -9,22 +9,22 @@ object CompaniasManager {
     val fakeCompaniasList = mutableListOf(
         Companias(
             id= currentId++,
-            nombre = "Telcel",
+            nombre = "TELCEL",
             category = CompaniaCategory.TELCEL
         ),
         Companias(
             id= currentId++,
-            nombre = "Movistar",
+            nombre = "MOVISTAR",
             category = CompaniaCategory.MOVISTAR
         ),
         Companias(
             id= currentId++,
-            nombre = "AT&T",
+            nombre = "ATYT",
             category = CompaniaCategory.ATyT
         ),
         Companias(
             id= currentId++,
-            nombre = "Unefon",
+            nombre = "UNEFON",
             category = CompaniaCategory.UNEFON
         )
     )

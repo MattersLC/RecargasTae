@@ -1,10 +1,11 @@
 package org.mini.data
 
 enum class TitleTopBarTypes (val value: String) {
-    DASHBOARD("Inicio"),
+    DASHBOARD("Recargas TAE 2025"),
     TELCEL("Recargas Telcel"),
     MOVISTAR("Recargas Movistar"),
-    ATyT("Recargas AT&T"),
-    UNEFON("Recargas Unefon")
+    ATYT("Recargas AT&T"),
+    UNEFON("Recargas Unefon"),
+    RECARGA("Aplica recarga")
 }
 

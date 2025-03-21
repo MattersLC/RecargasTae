@@ -42,7 +42,7 @@ import org.mini.model.Companias
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CompaniasScreen(uiState: CompaniasUiState, onCompaniasClick: (nombre: String) -> Unit) {
+fun CompaniasScreen(uiState: CompaniasUiState, onCompaniasClick: (compania: Companias) -> Unit) {
     val colors = getColorsTheme()
 
     LazyColumn(
@@ -50,22 +50,22 @@ fun CompaniasScreen(uiState: CompaniasUiState, onCompaniasClick: (nombre: String
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
 
-        items(uiState.companias) { compania ->
-            CompaniaCard(compania, onCompaniasClick = onCompaniasClick)
+        items(uiState.companias) { companias ->
+            CompaniaCard(companias = companias, onCompaniasClick = onCompaniasClick)
         }
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CompaniaCard(companias: Companias, onCompaniasClick: (nombre: String) -> Unit) {
+fun CompaniaCard(companias: Companias, onCompaniasClick: (compania: Companias) -> Unit) {
     val colors = getColorsTheme()
     Card(
         shape = RoundedCornerShape(16.dp),
-        backgroundColor = colors.cardColor,
+        backgroundColor = colors.colorExpenseItem,
         elevation = 8.dp,
         onClick = {
-            onCompaniasClick(companias.nombre)
+            onCompaniasClick(companias)
         },
         modifier = Modifier
             .fillMaxWidth()

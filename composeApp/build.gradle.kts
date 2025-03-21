@@ -1,7 +1,5 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
@@ -10,10 +8,11 @@ plugins {
     id("app.cash.sqldelight") version "2.0.2"
     kotlin("plugin.serialization") version "1.9.22"
 }
+
 sqldelight {
     databases {
         create("AppDatabase") {
-            packageName.set("com.recargasApp.db")
+            packageName.set("com.expenseApp.db")
         }
     }
 }
@@ -30,6 +29,7 @@ kotlin {
             }
         }
     }
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -40,9 +40,9 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -60,6 +60,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.android)
             implementation("com.google.accompanist:accompanist-systemuicontroller:0.31.3-beta")
         }
+
         commonMain.dependencies {
             implementation(compose.runtime)
             api(compose.foundation)
@@ -71,7 +72,6 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             api(compose.materialIconsExtended)
-
 
             //navigation preCompose
             api("moe.tlaster:precompose:1.5.10")
@@ -89,8 +89,8 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.ktor.content.negotiation)
             implementation(libs.ktor.serialization)
-
         }
+
         iosMain.dependencies {
             //sqldelight
             implementation("app.cash.sqldelight:native-driver:2.0.2")
@@ -101,6 +101,7 @@ kotlin {
         }
     }
 }
+
 
 android {
     namespace = "org.mini"
@@ -113,20 +114,25 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
-
-
+dependencies {
+    implementation(libs.androidx.foundation.android)
+    debugImplementation(libs.androidx.ui.tooling)
+}

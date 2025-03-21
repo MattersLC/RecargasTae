@@ -1,37 +1,30 @@
 package org.mini
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Apps
+import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.mini.data.TitleTopBarTypes
 import moe.tlaster.precompose.PreComposeApp
 import moe.tlaster.precompose.navigation.Navigator
+import moe.tlaster.precompose.navigation.path
 import moe.tlaster.precompose.navigation.rememberNavigator
-import org.example.project.presentacion.CompaniasUiState
-import org.mini.data.CompaniasManager
 import org.mini.data.CrossConfigDevice
-import org.mini.model.CompaniaCategory
-import org.mini.model.Companias
-import org.mini.ui.CompaniaCard
-import org.mini.ui.CompaniasScreen
+import org.mini.data.TitleTopBarTypes
+import org.mini.navigation.Navigator
 
 @Composable
 fun App(configDevice: CrossConfigDevice? = null) {
-
     PreComposeApp {
 
         val colors = getColorsTheme()
@@ -39,29 +32,49 @@ fun App(configDevice: CrossConfigDevice? = null) {
             val navigator = rememberNavigator()
             val titleTopBar = getTitleTopAppBar(navigator)
             val isCompania = titleTopBar != TitleTopBarTypes.DASHBOARD.value
-            //Navigator(navigator)
+            Navigator(navigator)
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
-                backgroundColor = Color.Transparent,
+                //backgroundColor = Color.Transparent,
                 topBar = {
                     TopAppBar(
                         elevation = 0.dp,
-                        //backgroundColor = colors.backgroundColor,
+                        backgroundColor = colors.backgroundColor,
                         title = {
-                            Text(
-                                text = titleTopBar,
+                            Text(text = titleTopBar,
                                 fontSize = 25.sp,
-                                color = colors.textColor
-                            )
+                                color = colors.textColor)
+                        },
+                        navigationIcon = {
+                            if (isCompania) {
+                                IconButton(
+                                    onClick = {
+                                        navigator.popBackStack()
+                                    }
+                                ){
+                                    Icon(
+                                        modifier = Modifier.padding(start = 16.dp),
+                                        imageVector = Icons.Default.ArrowBackIosNew,
+                                        contentDescription = "Back",
+                                        tint = colors.textColor
+                                    )
+                                }
+                            }else{
+                                Icon(
+                                    modifier = Modifier.padding(start = 16.dp),
+                                    imageVector = Icons.Default.Apps,
+                                    contentDescription = "Dashboard app",
+                                    tint = colors.textColor
+                                )
+                            }
                         }
-                    )}
-
+                    )
+                },
             ) {
-                CompaniasScreen(
-                    uiState = CompaniasUiState(
-                        companias = CompaniasManager.fakeCompaniasList
-                    ), onCompaniasClick = {}
-                )
+                Navigator(navigator)
+                /*CompaniasScreen(
+                    uiState = uiState, onCompaniasClick = {}
+                )*/
             }
         }
     }
@@ -71,10 +84,10 @@ fun App(configDevice: CrossConfigDevice? = null) {
 fun getTitleTopAppBar(navigator: Navigator): String {
     var titleTopBar = TitleTopBarTypes.DASHBOARD
 
-    val isOnAddExpenses =
-        navigator.currentEntry.collectAsState(null).value?.route?.route.equals("/recargas/{id}?")
-    if (isOnAddExpenses) {
-        titleTopBar = TitleTopBarTypes.TELCEL
+    val isOnMenu =
+        navigator.currentEntry.collectAsState(null).value?.path<String>("nombre")
+    isOnMenu?.let {
+        titleTopBar = TitleTopBarTypes.valueOf(it)
     }
 
     return titleTopBar.value
