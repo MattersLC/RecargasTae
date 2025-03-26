@@ -89,6 +89,8 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.ktor.content.negotiation)
             implementation(libs.ktor.serialization)
+            implementation("io.ktor:ktor-client-logging:2.3.8")
+
         }
 
         iosMain.dependencies {
@@ -99,6 +101,10 @@ kotlin {
             //ktor
             implementation(libs.ktor.client.darwin)
         }
+    }
+    sourceSets.commonTest.dependencies {
+        implementation(kotlin("test"))
+        implementation("org.junit.jupiter:junit-jupiter:5.10.0")
     }
 }
 

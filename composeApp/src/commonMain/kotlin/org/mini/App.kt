@@ -22,59 +22,54 @@ import moe.tlaster.precompose.navigation.rememberNavigator
 import org.mini.data.CrossConfigDevice
 import org.mini.data.TitleTopBarTypes
 import org.mini.navigation.Navigator
+import org.koin.compose.KoinContext
 
 @Composable
 fun App(configDevice: CrossConfigDevice? = null) {
     PreComposeApp {
+        KoinContext {
+            val colors = getColorsTheme()
+            AppTheme {
+                val navigator = rememberNavigator()
 
-        val colors = getColorsTheme()
-        AppTheme {
-            val navigator = rememberNavigator()
-            val titleTopBar = getTitleTopAppBar(navigator)
-            val isCompania = titleTopBar != TitleTopBarTypes.DASHBOARD.value
-            Navigator(navigator)
-            Scaffold(
-                modifier = Modifier.fillMaxSize(),
-                //backgroundColor = Color.Transparent,
-                topBar = {
-                    TopAppBar(
-                        elevation = 0.dp,
-                        backgroundColor = colors.backgroundColor,
-                        title = {
-                            Text(text = titleTopBar,
-                                fontSize = 25.sp,
-                                color = colors.textColor)
-                        },
-                        navigationIcon = {
-                            if (isCompania) {
-                                IconButton(
-                                    onClick = {
-                                        navigator.popBackStack()
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    topBar = {
+                        TopAppBar(
+                            elevation = 0.dp,
+                            backgroundColor = colors.backgroundColor,
+                            title = {
+                                Text(
+                                    text = getTitleTopAppBar(navigator),
+                                    fontSize = 25.sp,
+                                    color = colors.textColor
+                                )
+                            },
+                            navigationIcon = {
+                                val isCompania = getTitleTopAppBar(navigator) != TitleTopBarTypes.DASHBOARD.value
+                                if (isCompania) {
+                                    IconButton(onClick = { navigator.popBackStack() }) {
+                                        Icon(
+                                            modifier = Modifier.padding(start = 16.dp),
+                                            imageVector = Icons.Default.ArrowBackIosNew,
+                                            contentDescription = "Back",
+                                            tint = colors.textColor
+                                        )
                                     }
-                                ){
+                                } else {
                                     Icon(
                                         modifier = Modifier.padding(start = 16.dp),
-                                        imageVector = Icons.Default.ArrowBackIosNew,
-                                        contentDescription = "Back",
+                                        imageVector = Icons.Default.Apps,
+                                        contentDescription = "Dashboard app",
                                         tint = colors.textColor
                                     )
                                 }
-                            }else{
-                                Icon(
-                                    modifier = Modifier.padding(start = 16.dp),
-                                    imageVector = Icons.Default.Apps,
-                                    contentDescription = "Dashboard app",
-                                    tint = colors.textColor
-                                )
                             }
-                        }
-                    )
-                },
-            ) {
-                Navigator(navigator)
-                /*CompaniasScreen(
-                    uiState = uiState, onCompaniasClick = {}
-                )*/
+                        )
+                    },
+                ) { paddingValues ->
+                    Navigator(navigator = navigator)
+                }
             }
         }
     }
@@ -82,13 +77,7 @@ fun App(configDevice: CrossConfigDevice? = null) {
 
 @Composable
 fun getTitleTopAppBar(navigator: Navigator): String {
-    var titleTopBar = TitleTopBarTypes.DASHBOARD
-
-    val isOnMenu =
-        navigator.currentEntry.collectAsState(null).value?.path<String>("nombre")
-    isOnMenu?.let {
-        titleTopBar = TitleTopBarTypes.valueOf(it)
-    }
-
-    return titleTopBar.value
+    val currentEntry = navigator.currentEntry.collectAsState(null).value
+    val routeName = currentEntry?.path<String>("nombre")
+    return routeName?.let { TitleTopBarTypes.valueOf(it).value } ?: TitleTopBarTypes.DASHBOARD.value
 }

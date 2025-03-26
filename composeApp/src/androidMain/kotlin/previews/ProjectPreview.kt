@@ -6,10 +6,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import org.example.project.presentacion.CompaniasUiState
 import org.mini.data.CompaniasManager
 import org.mini.data.PaquetesRecargasManager
-import org.mini.model.PaquetesRecargas
 import org.mini.ui.CompaniaCard
 import org.mini.ui.CompaniasScreen
-import org.mini.ui.MenuItems
 import org.mini.ui.MenuRecargasScreen
 
 @Preview(showBackground = true)
@@ -17,7 +15,10 @@ import org.mini.ui.MenuRecargasScreen
 fun CompaniasPreview() {
     val fakeCompanias = CompaniasManager.fakeCompaniasList
 
-    CompaniasScreen(uiState = CompaniasUiState(companias = fakeCompanias), onCompaniasClick = {})
+    // Utiliza un estado específico de éxito para la previsualización
+    val uiState = CompaniasUiState.Success(fakeCompanias)
+
+    CompaniasScreen(uiState = uiState, onCompaniasClick = {})
 }
 
 @Preview(showBackground = true)
