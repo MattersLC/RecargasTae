@@ -23,12 +23,14 @@ import org.mini.data.CrossConfigDevice
 import org.mini.data.TitleTopBarTypes
 import org.mini.navigation.Navigator
 import org.koin.compose.KoinContext
+import org.mini.data.SessionCache
 
 @Composable
 fun App(configDevice: CrossConfigDevice? = null) {
     PreComposeApp {
         KoinContext {
             val colors = getColorsTheme()
+            SessionCache.configDevice = configDevice
             AppTheme {
                 val navigator = rememberNavigator()
 
