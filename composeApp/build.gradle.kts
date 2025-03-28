@@ -91,6 +91,10 @@ kotlin {
             implementation(libs.ktor.serialization)
             implementation("io.ktor:ktor-client-logging:2.3.8")
 
+            implementation("io.github.pdvrieze.xmlutil:core:0.84.3")
+            implementation("io.github.pdvrieze.xmlutil:serialization:0.84.3")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.5.1")
+
         }
 
         iosMain.dependencies {
@@ -142,3 +146,5 @@ dependencies {
     implementation(libs.androidx.foundation.android)
     debugImplementation(libs.androidx.ui.tooling)
 }
+
+

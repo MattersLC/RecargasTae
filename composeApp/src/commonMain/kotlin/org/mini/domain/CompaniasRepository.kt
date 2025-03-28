@@ -10,4 +10,6 @@ interface CompaniasRepository{
     suspend fun getPaquetesForCompany(nombreCompania: String): List<PaquetesRecargas>
 
     suspend fun getRecargasForPaquetes(nombreCompania: String): String?
+
+    suspend fun getTRequestID(): String?
 }

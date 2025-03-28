@@ -1,12 +1,16 @@
 package org.mini.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Recarga(
-    var name: String,
-    var sku: String,
-    var monto: Int,
-    var info: String,
-    var regex: String,
-    var costo: Int,
-    var stype: Int,
-    var opid: Int
+    val name: String,
+    val sku: String,
+    val monto: Int,
+    val telefono: String = "",
+    val info: String,
+    val regex: String,
+    val costo: Int,
+    val stype: Int,
+    val opid: Int
 )

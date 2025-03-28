@@ -18,7 +18,7 @@ fun CompaniasPreview() {
     // Utiliza un estado específico de éxito para la previsualización
     val uiState = CompaniasUiState.Success(fakeCompanias)
 
-    CompaniasScreen(uiState = uiState, onCompaniasClick = {})
+    //CompaniasScreen(uiState = uiState, onCompaniasClick = {})
 }
 
 @Preview(showBackground = true)
@@ -40,4 +40,6 @@ fun MenuRecargasScreenPreview() {
         onPaquetesRecargasClick = { }
     )
 }
+
+
 

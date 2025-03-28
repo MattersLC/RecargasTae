@@ -1,5 +1,6 @@
 package org.mini.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -24,6 +25,8 @@ import org.mini.getColorsTheme
 import org.mini.model.PaquetesRecargas
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
+
 @Composable
 fun MenuRecargasScreen(
     nombreCompania: String? = null,
@@ -34,7 +37,7 @@ fun MenuRecargasScreen(
     val nombre by remember { mutableStateOf(nombreCompania ?: "DESCONOCIDO") }
 
     LazyColumn(
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp).fillMaxHeight(),
+        modifier = Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(paquetesRecargas) { paquete ->

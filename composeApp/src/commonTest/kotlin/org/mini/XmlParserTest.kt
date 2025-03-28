@@ -1,13 +1,47 @@
 package org.mini
 
+import CompaniasRepoImpl
+import io.ktor.client.HttpClient
+import kotlinx.coroutines.runBlocking
 import org.mini.dto.XmlParser
 import kotlin.test.DefaultAsserter.assertEquals
 import kotlin.test.Test
-
+import org.mini.data.CompaniasManager
 class XmlParserTest {
 
+    //aqui tiene que ir la invocacion para ocupar el metodo y que me devuelva el xml
+
+    val httpClient = HttpClient()
+
+    // Instancia de CompaniasManager y la implementación de CompaniasRepo
+    val companiasManager = CompaniasManager
+    val repo = CompaniasRepoImpl(companiasManager, httpClient)
+
     @Test
-    fun `test parseResponse with valid XML`() {
+    fun `test getRecargasForPaquetes method`() = runBlocking {
+        // Instancia de HttpClient
+        val xmlParser = XmlParser()
+
+        // Nombre de compañía para probar
+        val nombreCompania = "TELCEL"
+
+        // Llamar al método y obtener el resultado
+        val result = repo.getRecargasForPaquetes(nombreCompania)
+
+        if (result != null) {
+            // Imprimir el resultado para verificarlo
+            println("Resultado obtenido: $result")
+            val recarga1 = xmlParser.parseSoapResponseToRecargasManually(result)
+            println("Despues de aqui viene la recarga 0")
+            println(recarga1[0].name)
+        }
+        else{
+            println("No hay conexion con el servidor")
+        }
+    }
+
+    @Test
+    fun `test parseResponse with valid XML`() = runBlocking {
         val xmlParser = XmlParser()
 
         // XML válido (exactamente como el devuelto por la API)
@@ -22,8 +56,10 @@ class XmlParserTest {
         </soap:Envelope>
     """.trimIndent()
 
+        val getTRequestId = repo.getTRequestID()
+
         // Llamar al método y verificar el resultado
-        val result = xmlParser.getTRequestIDResult(soapResponse)
+        val result = getTRequestId
         println("el valor es ------>"+result)
     }
 

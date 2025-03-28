@@ -37,12 +37,35 @@ class CompaniasRepoImpl(
         }
     }
 
-    override suspend fun getRecargasForPaquetes(nombreCompania: String): String {
-        TODO("Not yet implemented")
+    override suspend fun getRecargasForPaquetes(nombreCompania: String): String? {
+        val xml = xmlCreator.xmlgetProductsFrom("MINIABASTOS2025","gY.\$26@XWUf")
+        return try{
+                val response: HttpResponse = httpClient.post(BASE_URL) {
+                    contentType(ContentType.Text.Xml)
+                    header("SOAPAction", "http://tempuri.org/GetSkuList")
+                    header("Accept", "*/*")
+                    header("User-Agent", "KtorClient")
+                    header("Cache-Control", "no-cache")
+                    setBody(TextContent(xml, ContentType.Text.Xml)) // Cuerpo de la solicitud como texto XML
+                }
+            if (response.status.isSuccess()) {
+                val responseBody = response.bodyAsText()
+                println("Response Body:")
+
+                responseBody
+            } else {
+                println("Error: Código de respuesta inesperado ${response.status}")
+                null
+            }
+        }catch (e: Exception){
+            println("Error: ${e.message}")
+            println("No hay conexión con el servidor")
+            null
+        }
     }
 
     // Método mejorado y adaptado para Kotlin Multiplatform
-    suspend fun getTRequestID(): String? {
+    override suspend fun getTRequestID(): String? {
         val valor = xmlCreator.xmlGetTRequestID("MINIABASTOS2025", "gY.\$26@XWUf", "")
 
         return try {
@@ -64,7 +87,11 @@ class CompaniasRepoImpl(
 
                 // Procesa el resultado con el XML parser
                 val result = xmlParser.getTRequestIDResult(responseBody)
-                println("GetTRequestIDResult: $result")
+                if (result != null) {
+                    println("GetTRequestIDResult: $result")
+                } else {
+                    println("No me dio ningun valor el API")
+                }
                 result
             } else {
                 println("Error: Código de respuesta inesperado ${response.status}")
