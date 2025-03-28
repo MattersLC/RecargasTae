@@ -61,7 +61,7 @@ fun CompaniasScreen(uiState: CompaniasUiState, onCompaniasClick: (Companias) -> 
                 }
             } else {
                 LazyColumn(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(16.dp).fillMaxHeight(),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(uiState.companias) { compania ->
