@@ -14,6 +14,8 @@ import org.mini.dto.XmlParser
 import io.ktor.http.content.TextContent
 import io.ktor.http.ContentType
 import org.mini.dto.XMLCreator
+import org.mini.model.DoTResult
+import org.mini.model.Recarga
 
 // URL Base de la API
 private const val BASE_URL = "https://taeservicel.com.mx/testing/transact.asmx"
@@ -106,5 +108,62 @@ class CompaniasRepoImpl(
             null
         }
     }
+
+    override suspend fun getDoT(recarga: Recarga): DoTResult? {
+        val getTRequestID = getTRequestID()
+        var responseBody: String? = null
+
+        if (getTRequestID != null) {
+            val xmlDoT = xmlCreator.xmlgetApplyRecarga(
+                getTRequestID,
+                "MINIABASTOS2025",
+                recarga.sku,
+                recarga.telefono,
+                recarga.monto.toString()
+            )
+
+            try {
+                val response: HttpResponse = httpClient.post(BASE_URL) {
+                    // Configuración del encabezado y contenido de la solicitud
+                    contentType(ContentType.Text.Xml)
+                    header("SOAPAction", "http://tempuri.org/DoT")
+                    header("Connection", "keep-alive")
+                    header("Accept-Encoding", "gzip, deflate, br")
+                    header("Accept", "*/*")
+                    header("User-Agent", "KtorClient")
+                    header("Cache-Control", "no-cache")
+                    setBody(
+                        TextContent(
+                            xmlDoT,
+                            ContentType.Text.Xml
+                        )
+                    )
+                }
+
+                responseBody = response.bodyAsText()
+            } catch (e: Exception) {
+                println("Error: ${e.message}")
+                println("No hay conexión con el servidor")
+                return null // Devuelve null explícitamente en caso de error
+            }
+        } else {
+            println("Error: No se pudo obtener getTRequestID")
+            return null // Manejo explícito si getTRequestID es null
+        }
+
+        // Validar que la respuesta no sea nula antes de enviarla al parser
+        return if (!responseBody.isNullOrEmpty()) {
+            try {
+                xmlParser.parseSoapResponseToDoTResultManually(responseBody)
+            } catch (e: Exception) {
+                println("Error al parsear la respuesta: ${e.message}")
+                null // Devuelve null si ocurre un error al parsear
+            }
+        } else {
+            println("Error: La respuesta del servidor está vacía.")
+            null
+        }
+    }
+
 
 }

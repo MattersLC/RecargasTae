@@ -144,6 +144,9 @@ android {
 }
 dependencies {
     implementation(libs.androidx.foundation.android)
+    implementation(libs.androidx.ui.android)
+    implementation(libs.androidx.ui.text.android)
+    implementation(libs.androidx.foundation.layout.android)
     debugImplementation(libs.androidx.ui.tooling)
 }
 

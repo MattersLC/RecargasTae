@@ -39,6 +39,7 @@ fun PaquetesRecargasScreen(
     recarga: List<Recarga> = emptyList(),
     onRecargaClick: (recarga: Recarga) -> Unit
 ) {
+    val colors = getColorsTheme()
     // Valor predeterminado si nombreCompania es nulo
     val nombre by remember { mutableStateOf(nombreCompania ?: "DESCONOCIDO") }
 
@@ -66,6 +67,7 @@ fun PaquetesRecargasScreen(
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     ),
+                    color = colors.textColor,
                     textAlign = TextAlign.Center
                 )
             }

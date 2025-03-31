@@ -3,10 +3,13 @@ package org.mini
 import CompaniasRepoImpl
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.runBlocking
+import nl.adaptivity.xmlutil.serialization.XML
 import org.mini.dto.XmlParser
 import kotlin.test.DefaultAsserter.assertEquals
 import kotlin.test.Test
 import org.mini.data.CompaniasManager
+import org.mini.model.DoTResult
+
 class XmlParserTest {
 
     //aqui tiene que ir la invocacion para ocupar el metodo y que me devuelva el xml
@@ -86,4 +89,37 @@ class XmlParserTest {
         // Verificar que el resultado sea null debido a XML no válido
         assertEquals(null, result, "El método debería devolver null para XML mal formado.")
     }
+
+
+    @Test
+    fun `test xmlDoT`(){
+
+        val xmlParser = XmlParser()
+        val xml = """
+        <?xml version="1.0" encoding="utf-8"?>
+        <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <soap:Body>
+                <DoTResponse xmlns="http://tempuri.org/">
+                    <DoTResult>
+                        <transaction_id>0</transaction_id>
+                        <rcode>3</rcode>
+                        <rcode_description>Sin Saldo $0.00</rcode_description>
+                        <rcode_detail>SR029A</rcode_detail>
+                        <op_account>2222222222</op_account>
+                        <op_authorization />
+                        <printData />
+                        <xmlDevData />
+                    </DoTResult>
+                </DoTResponse>
+            </soap:Body>
+        </soap:Envelope>
+    """.trimIndent()
+
+        // Carga y deserializa el XML
+        val dotResult = xmlParser.parseSoapResponseToDoTResultManually(xml)
+        if (dotResult != null) {
+            println(dotResult.rcode_description)
+        }
+    }
 }
+

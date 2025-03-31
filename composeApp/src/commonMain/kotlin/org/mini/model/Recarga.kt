@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class Recarga(
     val name: String,
     val sku: String,
-    val monto: Int,
+    val monto: Double,
     val telefono: String = "",
     val info: String,
     val regex: String,

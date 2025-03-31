@@ -1,7 +1,7 @@
 package org.mini.dto
 
 import org.mini.model.Recarga
-import kotlin.text.RegexOption
+import org.mini.model.DoTResult
 
 
 class XmlParser {
@@ -39,7 +39,7 @@ class XmlParser {
                     // Extrae cada campo del nodo <product>
                     val name = productXml.substringAfter("<name>").substringBefore("</name>")
                     val sku = productXml.substringAfter("<sku>").substringBefore("</sku>")
-                    val monto = productXml.substringAfter("<monto>").substringBefore("</monto>").toInt()
+                    val monto = productXml.substringAfter("<monto>").substringBefore("</monto>").toDouble()
                     val info = productXml.substringAfter("<info>").substringBefore("</info>")
                     val regex = productXml.substringAfter("<regex>").substringBefore("</regex>")
                     val costo = productXml.substringAfter("<costo>").substringBefore("</costo>").toInt()
@@ -57,4 +57,36 @@ class XmlParser {
         return recargas
     }
 
+    fun parseSoapResponseToDoTResultManually(soapXml: String): DoTResult? {
+        // Paso 1: Extraer el contenido dentro de <soap:Body>
+        val bodyContent = soapXml
+            .substringAfter("<soap:Body>")
+            .substringBefore("</soap:Body>")
+
+        // Paso 2: Extraer el contenido dentro de <DoTResult>
+        val rawContent = bodyContent
+            .substringAfter("<DoTResult>")
+            .substringBefore("</DoTResult>")
+
+        return try {
+            // Extraer los valores de cada campo dentro de <DoTResult>
+            val transactionId = rawContent.substringAfter("<transaction_id>").substringBefore("</transaction_id>").toInt()
+            val rcode = rawContent.substringAfter("<rcode>").substringBefore("</rcode>").toInt()
+            val rcodeDescription = rawContent.substringAfter("<rcode_description>").substringBefore("</rcode_description>")
+            val rcodeDetail = rawContent.substringAfter("<rcode_detail>").substringBefore("</rcode_detail>")
+            val opAccount = rawContent.substringAfter("<op_account>").substringBefore("</op_account>")
+
+            // Crea el objeto DoTResult y devuélvelo
+            DoTResult(
+                transaction_id = transactionId,
+                rcode = rcode,
+                rcode_description = rcodeDescription,
+                rcode_detail = rcodeDetail,
+                op_account = opAccount,
+            )
+        } catch (e: Exception) {
+            println("Error procesando el nodo <DoTResult>: ${e.message}")
+            null
+        }
+    }
 }

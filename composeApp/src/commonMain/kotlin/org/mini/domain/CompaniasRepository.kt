@@ -1,6 +1,7 @@
 package org.example.project.domain
 
 import org.mini.model.Companias
+import org.mini.model.DoTResult
 import org.mini.model.PaquetesRecargas
 import org.mini.model.Recarga
 
@@ -12,4 +13,6 @@ interface CompaniasRepository{
     suspend fun getRecargasForPaquetes(nombreCompania: String): String?
 
     suspend fun getTRequestID(): String?
+
+    suspend fun getDoT(recarga: Recarga): DoTResult?
 }
