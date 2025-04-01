@@ -95,6 +95,10 @@ class CompaniasViewModel(private val repo: CompaniasRepository) : ViewModel() {
             }
         }
     }
+    fun resetPaquetesRecargasState() {
+        _paquetesRecargasState.value = PaquetesRecargasUiState.Loading // Reiniciar el estado
+    }
+
 
     fun getRecargasForPaquetes(nombreCompania: String) {
         viewModelScope.launch {
@@ -115,6 +119,9 @@ class CompaniasViewModel(private val repo: CompaniasRepository) : ViewModel() {
                     RecargasUiState.Error(e.message ?: "Error al obtener recargas.")
             }
         }
+    }
+    fun resetRecargasForPaquetes() {
+        _recargasState.value = RecargasUiState.Loading // Reiniciar el estado
     }
 
     fun getRecargasWithSku(sku: String): Recarga? {

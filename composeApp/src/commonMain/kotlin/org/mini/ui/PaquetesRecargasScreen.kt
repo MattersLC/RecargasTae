@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -32,6 +34,7 @@ import org.mini.getColorsTheme
 import org.mini.model.Recarga
 import recargastae.composeapp.generated.resources.Res
 import recargastae.composeapp.generated.resources.pugPerrito
+import androidx.compose.foundation.layout.fillMaxHeight
 
 @Composable
 fun PaquetesRecargasScreen(
@@ -73,11 +76,25 @@ fun PaquetesRecargasScreen(
             }
         }
     } else {
-        LazyColumn(
+        /*LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(recarga) { recarg ->
+                ItemsRecarga(
+                    recarga = recarg,
+                    onRecargaClick = onRecargaClick
+                )
+            }
+        }*/
+        LazyVerticalGrid(
+            modifier = Modifier.fillMaxHeight(),
+            columns = androidx.compose.foundation.lazy.grid.GridCells.Fixed(2),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(recarga) { recarg ->
+                // Pass the correct item to the MenuItems composable
                 ItemsRecarga(
                     recarga = recarg,
                     onRecargaClick = onRecargaClick
@@ -88,38 +105,49 @@ fun PaquetesRecargasScreen(
 }
 
 
-
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ItemsRecarga(
     recarga: Recarga,
     onRecargaClick: (recarga: Recarga) -> Unit
 ) {
-    val colors = getColorsTheme() // Assuming this is necessary
+    val colors = getColorsTheme()
     Card(
         shape = RoundedCornerShape(16.dp),
         backgroundColor = colors.colorExpenseItem,
         elevation = 8.dp,
         onClick = {
-            onRecargaClick(recarga) // Correctly passing the parameter
+            onRecargaClick(recarga)
         },
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp, vertical = 8.dp)
-            .height(60.dp)
+            .height(90.dp)
     ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
+            // Texto centrado en el medio de la tarjeta
             Text(
-                text = recarga.name, // Assuming "descripcion" exists
+                text = recarga.name,
                 style = MaterialTheme.typography.h6,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .align(Alignment.Center),
+                color = colors.textColor
+            )
+
+            // Texto del SKU con tamaño de letra más pequeño
+            Text(
+                text = "Sku: ${recarga.sku}",
+                style = MaterialTheme.typography.body2.copy(fontSize = 12.sp), // Tamaño ajustado
+                textAlign = TextAlign.Right,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(8.dp),
                 color = colors.textColor
             )
         }
     }
 }
+

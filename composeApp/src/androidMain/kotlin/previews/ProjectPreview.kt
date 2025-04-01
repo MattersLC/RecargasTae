@@ -6,8 +6,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import org.example.project.presentacion.CompaniasUiState
 import org.mini.data.CompaniasManager
 import org.mini.data.PaquetesRecargasManager
+import org.mini.model.Recarga
 import org.mini.ui.CompaniaCard
 import org.mini.ui.CompaniasScreen
+import org.mini.ui.ItemsRecarga
 import org.mini.ui.MenuRecargasScreen
 
 @Preview(showBackground = true)
@@ -39,6 +41,12 @@ fun MenuRecargasScreenPreview() {
         paquetesRecargas = PaquetesRecargasManager.fakePaquetesRecargasList,
         onPaquetesRecargasClick = { }
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PaquetesRecargasScreenPreview() {
+    ItemsRecarga(Recarga("Telcel 10","10111110",10.0,"","","",0,0,0),onRecargaClick = {})
 }
 
 
